@@ -1,5 +1,5 @@
 # livro-frontend-react
-Projeto de livro para front-end em React
+Projeto de livro para front-end em React, estrutura básico de CRUD, facilmente reusável para qualquer outro tema.
 
 Para inicializar o projeto em React
 `npx create-react-app .`

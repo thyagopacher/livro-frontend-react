@@ -51,6 +51,29 @@ const ResumoLivros = () => {
         <p className="badge bg-danger">{Number(resumo.media).toLocaleString("pt-br", {minimumFractionDigits: 2})}</p>
         <p>Preço médio dos Livros</p>
       </span>      
+
+      <div className="d-flex justify-content-center">
+        <Chart
+          width={'100%'}
+          height={'420'}
+          chartType="ColumnChart"
+          loader={<div>Loading Chart</div>}
+          data={grafico}
+          options={{
+            title: "Total de investimentos",
+            chartArea: { width: "80%" },
+            hAxis: {
+              title: "Ano de Publicação",
+            },
+            vAxis: {
+              title: "Preço Acumulado R$",
+            },
+            legend: {
+              position: "none",
+            },
+          }}
+        />
+      </div>
     </div>  
   );
 }

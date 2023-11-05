@@ -25,6 +25,36 @@ const ManutencaoLivros = () => {
       alert(`Erro... Não foi possivel obter os dados: ${error}`);
     }
   }
+  
+  const excluir = async (id, titulo) => {
+    if(!window.confirm(`Confirma a exclusão do livro ${titulo} ?`)){
+      return;
+    }
+    try{
+      await inAxios.delete(`livros/${id}`);
+      setLivros(livros.filter(
+        (livro) => livro.id !== id
+      ));
+    }catch(error){
+      alert(`Erro... Não foi possivel excluir: ${error}`);
+    }
+  }
+
+  const alterar = async (id, titulo, index) => {
+    const novoPreco = Number(prompt(`Informe o novo preço do livro "${titulo}"`));
+    if(isNaN(novoPreco) && novoPreco == 0){
+      return;
+    }
+
+    try{
+      await inAxios.put(`livros/${id}`, {preco: novoPreco});
+      const livrosAlteracao = [...livros];
+      livrosAlteracao[index].preco = novoPreco;
+      setLivros(livrosAlteracao);
+    }catch(error){
+      alert(`Erro... Não foi possivel alterar: ${error}`);
+    }
+  }
 
   //define o método que será executado assim que o componente for renderizado
   useEffect(() => {
@@ -34,10 +64,10 @@ const ManutencaoLivros = () => {
   return (
     <div className="container">
       <div className="row">
-        <div class="col-sm-7">
+        <div className="col-sm-7">
           <h4 className="fst-italic mt-3">Manutenção</h4>
         </div>
-        <div class="col-sm-5">
+        <div className="col-sm-5">
           <form onSubmit={handleSubmit(filtrarLista)}>
             <div className="input-group mt-3">
               <input type="text" className="form-control" placeholder="Titulo ou autor" required {...register("palavra")}/>
@@ -67,8 +97,11 @@ const ManutencaoLivros = () => {
         </thead>
         <tbody>
           {livros.map(
-            (livro) => (
-              <ItemLista key={livro.id} id={livro.id} titulo={livro.titulo} autor={livro.autor} ano={livro.ano} preco={livro.preco} foto={livro.foto} />
+            (livro, index) => (
+              <ItemLista key={livro.id} id={livro.id} titulo={livro.titulo} autor={livro.autor} ano={livro.ano} preco={livro.preco} foto={livro.foto} 
+                excluirClick={() => excluir(livro.id, livro.titulo)}
+                alterarClick={() => alterar(livro.id, livro.titulo, index)}
+              />
             ))}
         </tbody>
       </table>
